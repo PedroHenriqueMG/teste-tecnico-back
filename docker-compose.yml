@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  # api:
+  #   container_name: login_api
+  #   depends_on:
+  #     - postgres
+  #   ports:
+  #     - "8080:8080"
+  #   networks:
+  #     - my-login
+  #   volumes:
+  #     - .:/usr/src/app
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - DATABASE_URL=mongodb://mongo:mongo@db:27017/api
+
+  db:
+    container_name: db
+    image: mongo:6
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+      MONGO_INITDB_DATABASE: api
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - my-app
+    restart: always
+
+networks:
+  my-app:
+    driver: bridge
