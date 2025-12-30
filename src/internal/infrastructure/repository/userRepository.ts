@@ -1,4 +1,4 @@
-import { User } from "../../../domain/entities/User";
+import { User } from "../../domain/entities/User";
 
 export abstract class UserRepository {
   abstract update(user: User): Promise<void>;

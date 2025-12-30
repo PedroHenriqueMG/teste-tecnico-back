@@ -1,15 +1,12 @@
 import { User } from "../../../domain/entities/User";
 import { UserModel } from "../../../domain/database/models/UserModel";
 import { UserMapper } from "../../../domain/database/mappers/UserMapper";
-import { UserRepository } from "../../../infrastructure/auth/repository/userRepository";
+import { UserRepository } from "../../../infrastructure/repository/userRepository";
 
-export class MongooseUserRepository extends UserRepository {
+export class MongooseUserRepository implements UserRepository {
   async create(user: User): Promise<void> {
     const data = UserMapper.toPersistence(user);
-    await UserModel.create({
-      ...data,
-      _id: user.id,
-    });
+    await UserModel.create(data);
   }
 
   async findById(id: string): Promise<User | null> {
