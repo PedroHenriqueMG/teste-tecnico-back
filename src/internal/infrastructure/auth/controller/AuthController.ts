@@ -1,15 +1,23 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import { RegisterBodySchema } from "../dto/RegisterBody";
 import { createUserUseCase, CreateUserUseCase } from "../useCase/createUserUseCase/createUserUseCase";
 import { LoginBodySchema } from "../dto/LoginBody";
 import { generateTokenUseCase, GenerateTokenUseCase } from "../useCase/generateTokenUseCase/generateTokenUseCase";
 import { UserViewModel } from "../viewModel/UserViewModel";
+import { validate } from "../../middleware/zod";
+import { Parser } from "../../exceptions/Parser";
 
 class AuthController {
   constructor(private createUserUseCase: CreateUserUseCase, private generateTokenUseCase: GenerateTokenUseCase) {}
 
   async login(req: Request, res: Response) {
-    const { email, password } = LoginBodySchema.parse(req.body);
+    const body = validate(req, LoginBodySchema);
+
+    if(body instanceof Array){
+      throw new Parser(body.map(msg => msg.message).join(", "));
+    }
+
+    const { email, password } = body;
 
     const {token, userData} = await this.generateTokenUseCase.execute({ email, password });
 
@@ -22,7 +30,13 @@ class AuthController {
   }
 
   async register(req: Request, res: Response) {
-    const { email, password } = RegisterBodySchema.parse(req.body);
+    const body = validate(req, RegisterBodySchema);
+
+    if(body instanceof Array){
+      throw new Parser(body.map(msg => msg.message).join(", "));
+    }
+    
+    const { email, password } = body;
 
     await this.createUserUseCase.execute({ email, password });
 

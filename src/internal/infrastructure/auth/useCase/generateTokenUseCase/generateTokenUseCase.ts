@@ -14,6 +14,7 @@ export class GenerateTokenUseCase {
         const foundUser = await this.userRepository.findByEmail(user.email);
 
         if (!foundUser) {
+            console.log("User not found");
             throw new UserInvalid();
         }
 
