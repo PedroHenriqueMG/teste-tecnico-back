@@ -4,14 +4,14 @@ import { createUserUseCase, CreateUserUseCase } from "../useCase/createUserUseCa
 import { LoginBodySchema } from "../dto/LoginBody";
 import { generateTokenUseCase, GenerateTokenUseCase } from "../useCase/generateTokenUseCase/generateTokenUseCase";
 import { UserViewModel } from "../viewModel/UserViewModel";
-import { validate } from "../../middleware/zod";
+import { validateBody } from "../../middleware/zod";
 import { Parser } from "../../exceptions/Parser";
 
 class AuthController {
   constructor(private createUserUseCase: CreateUserUseCase, private generateTokenUseCase: GenerateTokenUseCase) {}
 
   async login(req: Request, res: Response) {
-    const body = validate(req, LoginBodySchema);
+    const body = validateBody(req, LoginBodySchema);
 
     if(body instanceof Array){
       throw new Parser(body.map(msg => msg.message).join(", "));
@@ -30,12 +30,12 @@ class AuthController {
   }
 
   async register(req: Request, res: Response) {
-    const body = validate(req, RegisterBodySchema);
+    const body = validateBody(req, RegisterBodySchema);
 
     if(body instanceof Array){
       throw new Parser(body.map(msg => msg.message).join(", "));
     }
-    
+
     const { email, password } = body;
 
     await this.createUserUseCase.execute({ email, password });

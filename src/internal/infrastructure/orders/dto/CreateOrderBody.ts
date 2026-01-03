@@ -1,6 +1,6 @@
 import {z} from 'zod';
 
-const stateEnum = z.enum(["CREATED", "ANALYSIS", "COMPLETED"]);
+export const stateEnum = z.enum(["CREATED", "ANALYSIS", "COMPLETED"]);
 const statusEnum = z.enum(["ACTIVE", "DELETED"]);
 const serviceStatusEnum = z.enum(["PENDING", "DONE"]);
 
@@ -19,4 +19,5 @@ export const CreateOrderBodySchema = z.object({
   ).min(1, "At least one service is required"),
 });
 
+export type StateEnum = z.infer<typeof stateEnum>;
 export type CreateOrderBody = z.infer<typeof CreateOrderBodySchema>;

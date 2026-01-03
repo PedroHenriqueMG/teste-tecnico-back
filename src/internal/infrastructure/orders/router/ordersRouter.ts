@@ -6,3 +6,4 @@ export const ordersRouter = Router();
 
 ordersRouter.use(authMiddleware)
 ordersRouter.post("/", (req, res) => ordersController.createOrder(req, res));
+ordersRouter.get("/", (req, res) => ordersController.getAllOrders(req, res));
