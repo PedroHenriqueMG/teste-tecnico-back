@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { Replace } from '../../../types/replace';
+import { Replace } from '../../../@types/replace';
 
 interface UserSchema {
   email: string;

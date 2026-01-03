@@ -5,11 +5,6 @@ import { LoginBodySchema } from "../dto/LoginBody";
 import { generateTokenUseCase, GenerateTokenUseCase } from "../useCase/generateTokenUseCase/generateTokenUseCase";
 import { UserViewModel } from "../viewModel/UserViewModel";
 
-interface JwtPayLoad {
-  id: string;
-}
-
-
 class AuthController {
   constructor(private createUserUseCase: CreateUserUseCase, private generateTokenUseCase: GenerateTokenUseCase) {}
 
@@ -24,32 +19,6 @@ class AuthController {
       token,
       user,
     });
-  }
-
-  async getProfile(req: Request, res: Response) {
-    // const { authorization } = req.headers;
-
-    // if (!authorization) {
-    //   throw new UnauthorizedError("Faça login para ter acesso a essa rota");
-    // }
-
-    // const token = authorization.split(" ")[1];
-
-    // const { id } = jwt.verify(token, process.env.JWT_PASS ?? " ") as JwtPayLoad;
-
-    // const user = await prisma.users.findUnique({
-    //   where: {
-    //     id: id,
-    //   },
-    // });
-
-    // if (!user) {
-    //   throw new UnauthorizedError("Faça login para ter acesso a essa rota");
-    // }
-
-    // const { password: _, ...loggedUser } = user;
-
-    // return res.json(loggedUser);
   }
 
   async register(req: Request, res: Response) {
