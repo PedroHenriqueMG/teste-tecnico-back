@@ -25,3 +25,5 @@ Agora rode o seguinte comando para subir o banco de dados e a API
 ```
 docker-compose up --build
 ```
+
+Quando a API estiver rodando acesse o /docs para acessar o swagger da aplicação.
