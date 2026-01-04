@@ -1,21 +1,23 @@
 version: "3.8"
 
 services:
-  # api:
-  #   container_name: login_api
-  #   depends_on:
-  #     - postgres
-  #   ports:
-  #     - "8080:8080"
-  #   networks:
-  #     - my-login
-  #   volumes:
-  #     - .:/usr/src/app
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     - DATABASE_URL=mongodb://mongo:mongo@db:27017/api
+  api:
+    container_name: api
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 8080:8080
+    env_file:
+      - ./.env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - my-app
 
   db:
     container_name: db
@@ -31,6 +33,12 @@ services:
     networks:
       - my-app
     restart: always
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
 
 networks:
   my-app:

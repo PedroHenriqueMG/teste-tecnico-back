@@ -1,29 +1,17 @@
-###################
-# BUILD FOR LOCAL DEVELOPMENT
-###################
-
-FROM node:20-alpine As development
+FROM node:22.13.1-alpine
 
 WORKDIR /usr/src/app
 
-COPY --chown=node:node package*.json ./
+RUN apk add --no-cache openssl
 
-RUN npm install
+RUN npm install -g pnpm
 
-COPY . /usr/src/app
+COPY package*.json pnpm-lock.yaml ./
 
-RUN npm run prisma:generate
+RUN pnpm install
 
-USER node
-
-###################
-# PRODUCTION
-###################
-
-FROM node:20-alpine As production
-
-COPY --chown=node:node --from=development /usr/src/app/ ./
+COPY . .
 
 EXPOSE 8080
 
-CMD [ "npm", "run", "start" ]
+ENTRYPOINT ["sh", "-c", "pnpm build && pnpm start"]
