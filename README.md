@@ -1,37 +1,27 @@
-# Login API
 
-## Documentação da API
+# Documentação do projeto
 
-#### Como rodar a API
+Entre em cada uma das pastas front e back depois crei um arquivo .env em cada um copie o conteudo do .env.sample dentro dele.
 
-Dê um clone no projeto, e rode os seguintes comandos
+Quando estiver configurando o .env da API descubra o ip da sua maquina e substitua o localhost pelo ip da sua maquina, faça isso ultilizando os seguintes comandos:
 
-```http
- docker-compose up -d
- npx prisma migrate dev
+MacOS:
+```
+ipconfig getifaddr en0
 ```
 
-lembre-se de colovar um .env, seguindo o exemplo, no JWT_PASS coloque uma senha criptografada se possível
+Linux:
+```
+hostname -I
+```
 
-## Rotas disponiveis na API
+Windows:
 
-#### /signup
+```
+ipconfig
+```
 
-| Parâmetro  | Tipo     | Descrição   |
-| :--------- | :------- | :---------- |
-| `email`    | `string` | Obrigatório |
-| `name`     | `string` | Obrigatório |
-| `password` | `string` | Obrigatório |
-
-#### /login
-
-| Parâmetro  | Tipo     | Descrição   |
-| :--------- | :------- | :---------- |
-| `email`    | `string` | Obrigatório |
-| `password` | `string` | Obrigatório |
-
-#### /
-
-| Parâmetro      | Tipo     | Descrição   |
-| :------------- | :------- | :---------- |
-| `Bearer Token` | `string` | Obrigatório |
+Agora rode o seguinte comando para subir o banco de dados e a API
+```
+docker-compose up --build
+```
