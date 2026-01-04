@@ -6,9 +6,10 @@ import { createOrderUseCase, CreateOrderUseCase } from "../useCase/createOrderUs
 import { QueryParamsSchema } from "../dto/GetOrdersParams";
 import { getAllOrdersUseCase, GetAllOrdersUseCase } from "../useCase/getAllOrdersUseCase/getAllOrdersUseCase";
 import { OrderViewModel } from "../viewModel/OrderViewModel";
+import { advanceOrderStatusUseCase, AdvanceOrderStatusUseCase } from "../useCase/advanceOrderStatusUseCase/advanceOrderStatusUseCase";
 
 export class OrdersController {
-    constructor(private createOrderUseCase: CreateOrderUseCase, private getAllOrdersUseCase: GetAllOrdersUseCase) {}
+    constructor(private createOrderUseCase: CreateOrderUseCase, private getAllOrdersUseCase: GetAllOrdersUseCase, private advanceOrderStatusUseCase: AdvanceOrderStatusUseCase) {}
 
     async createOrder(req: Request, res: Response) {
         const body = validateBody(req, CreateOrderBodySchema);
@@ -39,6 +40,16 @@ export class OrdersController {
         
         return res.json({ ...result, orders });
     }
+
+    async updateStatus(req: Request, res: Response) {
+        const { id } = req.params;
+
+        const updatedOrder = await this.advanceOrderStatusUseCase.execute(id);
+
+        const order = OrderViewModel.toHTTP(updatedOrder);
+        
+        return res.json(order);
+    }
 }
 
-export const ordersController = new OrdersController(createOrderUseCase, getAllOrdersUseCase);
+export const ordersController = new OrdersController(createOrderUseCase, getAllOrdersUseCase, advanceOrderStatusUseCase);

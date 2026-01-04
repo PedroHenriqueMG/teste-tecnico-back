@@ -30,12 +30,14 @@ export class MongooseUserRepository implements UserRepository {
     return userDocs.map((doc) => UserMapper.toDomain(doc));
   }
 
-  async update(user: User): Promise<void> {
+  async update(user: User): Promise<User> {
     const data = UserMapper.toPersistence(user);
-    await UserModel.findByIdAndUpdate(user.id, {
+    const updatedDoc = await UserModel.findByIdAndUpdate(user.id, {
       ...data,
       updatedAt: new Date(),
-    });
+    }, { new: true });
+
+    return UserMapper.toDomain(updatedDoc!);
   }
 
   async delete(id: string): Promise<void> {

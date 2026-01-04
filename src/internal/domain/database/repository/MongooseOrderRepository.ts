@@ -22,12 +22,14 @@ export class MongooseOrderRepository implements OrderRepository {
     return orderDocs.map((doc) => OrderMapper.toDomain(doc));
   }
 
-  async update(order: Order): Promise<void> {
+  async update(order: Order): Promise<Order> {
     const data = OrderMapper.toPersistence(order);
-    await OrderModel.findByIdAndUpdate(order.id, {
+    const updatedDoc = await OrderModel.findByIdAndUpdate(order.id, {
       ...data,
       updatedAt: new Date(),
-    });
+    }, { new: true });
+
+    return OrderMapper.toDomain(updatedDoc!);
   }
 
   async delete(id: string): Promise<void> {
